@@ -8,6 +8,8 @@
     --glass-border: rgba(0, 163, 255, 0.25);
     --nav-safe-top: 105px;
     --hud-safe-bottom: 75px;
+    --site-max-w: 1360px;
+    --site-edge-x: max(4%, calc((100vw - 1360px) / 2 + 4%));
 }
 
 * {
@@ -131,7 +133,7 @@ html, body {
     left: 0;
     width: 100%;
     z-index: 100;
-    padding: 16px 5%;
+    padding: 16px var(--site-edge-x);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -212,18 +214,18 @@ html, body {
         linear-gradient(90deg, rgba(7, 11, 20, 0.82) 0%, rgba(7, 11, 20, 0.25) 55%, rgba(7, 11, 20, 0.48) 100%);
 }
 
-/* ================= SAFE-ZONE STORY STAGE ================= */
+/* ================= SAFE-ZONE STORY STAGE (UNIFIED 1360PX RAIL) ================= */
 .story-stage {
     position: absolute;
     inset: 0;
     z-index: 10;
     pointer-events: none;
-    padding: var(--nav-safe-top) 6% var(--hud-safe-bottom);
+    padding: var(--nav-safe-top) var(--site-edge-x) var(--hud-safe-bottom);
 }
 
 .story-beat {
     position: absolute;
-    inset: var(--nav-safe-top) 6% var(--hud-safe-bottom);
+    inset: var(--nav-safe-top) var(--site-edge-x) var(--hud-safe-bottom);
     display: flex;
     flex-direction: column;
     opacity: 0;
@@ -370,7 +372,7 @@ html, body {
 /* Dispatch Network SVG Overlay */
 .dispatch-svg {
     position: absolute;
-    right: 5%;
+    right: var(--site-edge-x);
     top: 24%;
     width: min(460px, 42vw);
     opacity: 0;
@@ -421,12 +423,12 @@ html, body {
     background: rgba(0, 163, 255, 0.12);
 }
 
-/* Bottom Progress Bar & Scroll Cue */
+/* Bottom Progress Bar & Scroll Cue (Aligned to 1360px Rail) */
 .scroll-hud {
     position: absolute;
     bottom: 24px;
-    left: 6%;
-    right: 6%;
+    left: var(--site-edge-x);
+    right: var(--site-edge-x);
     z-index: 20;
     display: flex;
     align-items: center;
@@ -479,7 +481,7 @@ html, body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 80px 6%;
+    padding: 80px var(--site-edge-x);
 }
 
 /* ================= STRICT DESKTOP (1025px AND ABOVE) ================= */
@@ -543,6 +545,7 @@ html, body {
     :root {
         --nav-safe-top: 86px;
         --hud-safe-bottom: 62px;
+        --site-edge-x: 5%;
     }
 
     .nav-logo img {
@@ -564,7 +567,7 @@ html, body {
     .beat-3,
     .beat-4,
     .beat-5 {
-        inset: var(--nav-safe-top) 6% var(--hud-safe-bottom);
+        inset: var(--nav-safe-top) 5% var(--hud-safe-bottom);
         justify-content: center;
         align-items: center;
         text-align: center;
@@ -633,6 +636,11 @@ html, body {
         padding: 9px 15px;
         font-size: 0.76rem;
         border-radius: 10px;
+    }
+
+    .scroll-hud {
+        left: 5%;
+        right: 5%;
     }
 
     .progress-track {

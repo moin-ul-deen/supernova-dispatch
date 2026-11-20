@@ -1,9 +1,9 @@
 /* ================= SUPERNOVA GLOBAL THEME & CONTAINERS ================= */
 .sn-container {
     width: 100%;
-    max-width: 1240px;
+    max-width: 1360px;
     margin: 0 auto;
-    padding: 0 5%;
+    padding: 0 4%;
     box-sizing: border-box;
 }
 
@@ -20,7 +20,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* ================= ENHANCED NAVBAR & MOBILE DRAWER ================= */
+/* ================= ENHANCED NAVBAR & MOBILE DRAWER (ALIGNED WITH 1360PX CONTAINER) ================= */
 .top-nav {
     position: fixed;
     top: 0;
@@ -28,7 +28,7 @@
     width: 100%;
     max-width: 100vw;
     z-index: 100;
-    padding: 16px 5%;
+    padding: 16px max(4%, calc((100vw - 1360px) / 2 + 4%));
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -44,7 +44,7 @@
     background: rgba(7, 11, 20, 0.92) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    padding: 12px 5%;
+    padding: 12px max(4%, calc((100vw - 1360px) / 2 + 4%));
     border: none !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
@@ -813,7 +813,7 @@
     margin-bottom: 16px;
 }
 
-/* ================= FOOTER ================= */
+/* ================= FOOTER (ALIGNED WITH 1360PX CONTAINER) ================= */
 .sn-footer {
     width: 100%;
     background: #04070D;
@@ -996,11 +996,11 @@
 
 @media (max-width: 768px) {
     .top-nav {
-        padding: 12px 4%;
+        padding: 12px 5%;
     }
 
     .top-nav.scrolled {
-        padding: 10px 4%;
+        padding: 10px 5%;
     }
 
     .nav-logo img {

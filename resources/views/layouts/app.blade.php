@@ -22,7 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
 </head>
-<body>
+<body class="{{ request()->routeIs('home') ? 'home-page' : 'inner-page' }}">
 
     <!-- Sticky Glass Top Navigation -->
     <header class="top-nav">
@@ -32,9 +32,10 @@
 
         <nav class="nav-links" aria-label="Main Navigation">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-            <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">Services</a>
-            <a href="{{ route('equipment') }}" class="{{ request()->routeIs('equipment') ? 'active' : '' }}">Equipment</a>
             <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a>
+            <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">Services</a>
+            <a href="{{ route('reviews') }}" class="{{ request()->routeIs('reviews') ? 'active' : '' }}">Reviews</a>
+            <a href="{{ route('equipment') }}" class="{{ request()->routeIs('equipment') ? 'active' : '' }}">Equipment</a>
             <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
         </nav>
 
@@ -47,9 +48,10 @@
     <!-- Fullscreen Mobile Menu Drawer -->
     <div class="mobile-drawer" id="mobile-nav-drawer">
         <a href="{{ route('home') }}">Home</a>
+        <a href="{{ route('about') }}">About</a>        
         <a href="{{ route('services') }}">Services</a>
+        <a href="{{ route('reviews') }}">Reviews</a>
         <a href="{{ route('equipment') }}">Equipment</a>
-        <a href="{{ route('about') }}">About</a>
         <a href="{{ route('contact') }}">Contact</a>
         <a href="{{ route('contact') }}" class="btn-primary">Get Free Fleet Setup</a>
     </div>
@@ -71,9 +73,10 @@
                     <h4>Company</h4>
                     <ul>
                         <li><a href="{{ route('home') }}">Home</a></li>
-                        <li><a href="{{ route('services') }}">Dispatch Services</a></li>
-                        <li><a href="{{ route('equipment') }}">Fleet Equipment</a></li>
                         <li><a href="{{ route('about') }}">About Supernova</a></li>
+                        <li><a href="{{ route('services') }}">Dispatch Services</a></li>
+                        <li><a href="{{ route('reviews') }}">Reviews</a></li>
+                        <li><a href="{{ route('equipment') }}">Fleet Equipment</a></li>
                         <li><a href="{{ route('contact') }}">Carrier Onboarding</a></li>
                     </ul>
                 </div>
