@@ -14,7 +14,7 @@
                     TRUSTED BY OWNER-OPERATORS <span>&amp; FLEETS ACROSS THE US.</span>
                 </h1>
                 <p class="section-desc">
-                    Real-time feedback from carriers running Dry Van, Reefer, Flatbed, and Box Trucks with our dispatch desk. Share your experience and see it publish live immediately.
+                    Real-time feedback from carriers running Dry Van, Reefer, Flatbed, Box Trucks, and specialized trailers with our dispatch desk. Share your experience and see it publish live immediately.
                 </p>
 
                 <div class="rv-stats-row">
@@ -55,12 +55,12 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="rv_name">Driver / Owner Name *</label>
-                            <input id="rv_name" class="sn-input" type="text" name="reviewer_name" required maxlength="100" placeholder="e.g. Marcus Vance">
+                            <label for="rv_first_name">Driver / Owner First Name *</label>
+                            <input id="rv_first_name" class="sn-input" type="text" name="first_name" required maxlength="50" placeholder="e.g. Marcus">
                         </div>
                         <div class="form-group">
-                            <label for="rv_company">Trucking Co. / MC#</label>
-                            <input id="rv_company" class="sn-input" type="text" name="company_name" maxlength="120" placeholder="e.g. Vance Freight LLC">
+                            <label for="rv_last_name">Driver / Owner Last Name *</label>
+                            <input id="rv_last_name" class="sn-input" type="text" name="last_name" required maxlength="50" placeholder="e.g. Vance">
                         </div>
                     </div>
 
@@ -72,6 +72,7 @@
                                 <option value="Reefer">Refrigerated (Reefer)</option>
                                 <option value="Flatbed">Heavy Flatbed / Step Deck</option>
                                 <option value="Box Truck">26' Box Truck</option>
+                                <option value="Other">Other (Specify Equipment)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -80,9 +81,15 @@
                         </div>
                     </div>
 
+                    {{-- Dynamic Custom Equipment Box (Appears when "Other" is selected) --}}
+                    <div class="form-group rv-custom-equip-wrap" id="customEquipWrap" style="display:none;">
+                        <label for="rv_custom_equip">Specify Your Equipment Type *</label>
+                        <input id="rv_custom_equip" class="sn-input" type="text" name="custom_equipment" maxlength="60" placeholder="e.g. Hotshot, Power Only, Conestoga, RGN">
+                    </div>
+
                     <div class="form-group">
                         <label for="rv_comment">Your Dispatch Experience *</label>
-                        <textarea id="rv_comment" class="sn-input" name="comment" rows="3" required minlength="10" maxlength="800" placeholder="Share how our rate negotiation, communication, or back-office support helped your fleet..."></textarea>
+                        <textarea id="rv_comment" class="sn-input" name="comment" rows="3" required minlength="10" maxlength="800" placeholder="Share how our rate negotiation, communication, or back-office support helped your truck..."></textarea>
                     </div>
 
                     <button type="submit" class="btn-primary rv-submit-btn" id="submitReviewBtn">
@@ -110,10 +117,10 @@
     <div class="rv-marquee-track">
         @php
             $seedHighlights = [
-                ['name' => 'Derrick Holloway', 'co' => 'Holloway Logistics • Dry Van', 'text' => 'Moved my 2 Dry Vans from $2.15/mi average up to $2.78/mi on Midwest triangles within two weeks. Zero forced dispatch.'],
-                ['name' => 'Carlos Mendez', 'co' => 'Mendez Cold Chain • Reefer', 'text' => 'Detention pay actually gets collected now. Supernova handles broker packets and lumper receipts while I focus on driving.'],
-                ['name' => 'Trevor Jenkins', 'co' => 'IronHaul Flatbed • Flatbed', 'text' => 'Best flatbed dispatch team I have worked with. Consistently pre-booked before I even drop my tarps.'],
-                ['name' => 'Rashid Al-Mansoor', 'co' => 'Apex Expedited • 26ft Box Truck', 'text' => 'Transparent rate confirmations sent directly to my email before every booking. Reliable weekend coverage too.'],
+                ['name' => 'Derrick Holloway', 'tag' => '53\' Dry Van', 'text' => 'Moved my 2 Dry Vans from $2.15/mi average up to $2.78/mi on Midwest triangles within two weeks. Zero forced dispatch.'],
+                ['name' => 'Carlos Mendez', 'tag' => 'Reefer', 'text' => 'Detention pay actually gets collected now. Supernova handles broker packets and lumper receipts while I focus on driving.'],
+                ['name' => 'Trevor Jenkins', 'tag' => 'Flatbed', 'text' => 'Best flatbed dispatch team I have worked with. Consistently pre-booked before I even drop my tarps.'],
+                ['name' => 'Rashid Al-Mansoor', 'tag' => '26\' Box Truck', 'text' => 'Transparent rate confirmations sent directly to my email before every booking. Reliable weekend coverage too.'],
             ];
         @endphp
 
@@ -122,12 +129,12 @@
                 <article class="glass-card rv-m-card">
                     <div class="rv-m-top">
                         <span class="rv-m-stars">★★★★★</span>
-                        <span class="rv-m-badge">Verified Carrier</span>
+                        <span class="rv-m-badge">{{ $item['tag'] }}</span>
                     </div>
                     <p>"{{ $item['text'] }}"</p>
                     <div class="rv-m-author">
                         <strong>{{ $item['name'] }}</strong>
-                        <span>{{ $item['co'] }}</span>
+                        <span>Verified Owner-Operator</span>
                     </div>
                 </article>
             @endforeach
@@ -141,7 +148,7 @@
                     <p>"{{ \Illuminate\Support\Str::limit($rev->comment, 160) }}"</p>
                     <div class="rv-m-author">
                         <strong>{{ $rev->reviewer_name }}</strong>
-                        <span>{{ $rev->company_name ?: 'Owner-Operator' }}</span>
+                        <span>Verified Owner-Operator</span>
                     </div>
                 </article>
             @endforeach
@@ -152,12 +159,12 @@
                 <article class="glass-card rv-m-card">
                     <div class="rv-m-top">
                         <span class="rv-m-stars">★★★★★</span>
-                        <span class="rv-m-badge">Verified Carrier</span>
+                        <span class="rv-m-badge">{{ $item['tag'] }}</span>
                     </div>
                     <p>"{{ $item['text'] }}"</p>
                     <div class="rv-m-author">
                         <strong>{{ $item['name'] }}</strong>
-                        <span>{{ $item['co'] }}</span>
+                        <span>Verified Owner-Operator</span>
                     </div>
                 </article>
             @endforeach
@@ -181,12 +188,22 @@
                 <button type="button" class="rv-chip" data-filter="Reefer">Reefer</button>
                 <button type="button" class="rv-chip" data-filter="Flatbed">Flatbed</button>
                 <button type="button" class="rv-chip" data-filter="Box Truck">Box Truck</button>
+                <button type="button" class="rv-chip" data-filter="Other">Other</button>
             </div>
         </div>
 
         <div class="rv-grid" id="liveReviewsGrid">
             @forelse($reviews as $review)
-                <article class="glass-card rv-card" data-id="{{ $review->id }}" data-equipment="{{ $review->equipment_type }}">
+                @php
+                    $nameParts = preg_split('/\s+/', trim($review->reviewer_name));
+                    $cardInitials = count($nameParts) >= 2
+                        ? strtoupper(mb_substr($nameParts[0], 0, 1) . mb_substr(end($nameParts), 0, 1))
+                        : strtoupper(mb_substr(trim($review->reviewer_name), 0, 2));
+                    $standardTypes = ['Dry Van', 'Reefer', 'Flatbed', 'Box Truck'];
+                    $filterCategory = in_array($review->equipment_type, $standardTypes) ? $review->equipment_type : 'Other';
+                @endphp
+
+                <article class="glass-card rv-card" data-id="{{ $review->id }}" data-equipment="{{ $filterCategory }}">
                     @if($isAdmin)
                         <button type="button" class="rv-del-btn" data-url="{{ route('reviews.destroy', $review->id) }}" title="Delete Review">
                             ✕ Delete
@@ -194,10 +211,10 @@
                     @endif
 
                     <div class="rv-card-top">
-                        <div class="rv-avatar">{{ strtoupper(substr(trim($review->reviewer_name), 0, 2)) }}</div>
+                        <div class="rv-avatar">{{ $cardInitials }}</div>
                         <div class="rv-meta">
                             <h3>{{ $review->reviewer_name }}</h3>
-                            <span>{{ $review->company_name ?: 'Independent Owner-Operator' }}</span>
+                            <span class="rv-verified-sub">✓ Verified Owner-Operator</span>
                         </div>
                         <div class="rv-card-stars" aria-label="{{ $review->rating }} out of 5 stars">
                             {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
@@ -258,6 +275,13 @@
 .rv-form-box .form-row,
 .rv-form-box .form-group {
     margin-bottom: 12px;
+}
+.rv-custom-equip-wrap {
+    animation: rvFadeSlide 0.22s ease-out;
+}
+@keyframes rvFadeSlide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 .rv-form-box textarea.sn-input {
     resize: vertical;
@@ -410,8 +434,8 @@
     font-size: 0.86rem;
 }
 .rv-m-author span {
-    color: var(--text-muted);
-    font-size: 0.76rem;
+    color: #38BDF8;
+    font-size: 0.74rem;
 }
 @keyframes rvMarquee {
     from { transform: translateX(0); }
@@ -511,10 +535,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.rv-meta span {
+.rv-verified-sub {
     display: block;
-    font-size: 0.78rem;
-    color: var(--text-muted);
+    font-size: 0.76rem;
+    color: #38BDF8;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -604,6 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isAdmin = @json($isAdmin);
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
 
+    // Star Rating Picker
     const starButtons = document.querySelectorAll('#starSelector .rv-star-btn');
     const ratingInput = document.getElementById('ratingInput');
     starButtons.forEach(btn => {
@@ -614,6 +640,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Show / Hide Custom Equipment Input when "Other" is selected
+    const equipSelect = document.getElementById('rv_equip');
+    const customEquipWrap = document.getElementById('customEquipWrap');
+    const customEquipInput = document.getElementById('rv_custom_equip');
+
+    equipSelect?.addEventListener('change', () => {
+        const isOther = equipSelect.value === 'Other';
+        customEquipWrap.style.display = isOther ? 'block' : 'none';
+        customEquipInput.required = isOther;
+        if (isOther) {
+            customEquipInput.focus();
+        } else {
+            customEquipInput.value = '';
+        }
+    });
+
+    // Equipment Filter Chips
     document.querySelectorAll('#equipmentFilters .rv-chip').forEach(chip => {
         chip.addEventListener('click', () => {
             document.querySelectorAll('#equipmentFilters .rv-chip').forEach(c => c.classList.remove('active'));
@@ -625,6 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Instant AJAX Review Submit
     const form = document.getElementById('liveReviewForm');
     const alertBox = document.getElementById('reviewFormAlert');
     const submitBtn = document.getElementById('submitReviewBtn');
@@ -645,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Please fill in your name and at least 10 characters for your review.');
+                throw new Error(data.message || 'Please complete all required fields.');
             }
 
             const r = data.review;
@@ -655,14 +699,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const newCard = document.createElement('article');
             newCard.className = 'glass-card rv-card';
             newCard.dataset.id = r.id;
-            newCard.dataset.equipment = r.equipment_type;
+            newCard.dataset.equipment = r.filter_key;
             newCard.innerHTML = `
                 ${deleteBtnHtml}
                 <div class="rv-card-top">
                     <div class="rv-avatar">${r.initials}</div>
                     <div class="rv-meta">
                         <h3>${r.reviewer_name}</h3>
-                        <span>${r.company_name}</span>
+                        <span class="rv-verified-sub">✓ ${r.subtitle}</span>
                     </div>
                     <div class="rv-card-stars">${starsHtml}</div>
                 </div>
@@ -677,6 +721,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('emptyReviewsNote')?.remove();
             grid.prepend(newCard);
             form.reset();
+            customEquipWrap.style.display = 'none';
+            customEquipInput.required = false;
             ratingInput.value = 5;
             starButtons.forEach(b => b.classList.add('active'));
 
@@ -693,6 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Admin Delete Handler
     grid?.addEventListener('click', async (e) => {
         const delBtn = e.target.closest('.rv-del-btn');
         if (!delBtn) return;

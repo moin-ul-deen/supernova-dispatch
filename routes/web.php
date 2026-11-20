@@ -43,15 +43,35 @@ Route::post('/reviews', function (Request $request) {
     }
 
     $validated = $request->validate([
-        'reviewer_name'  => 'required|string|max:100',
-        'company_name'   => 'nullable|string|max:120',
-        'equipment_type' => 'required|string|max:50',
-        'lane_route'     => 'nullable|string|max:100',
-        'rating'         => 'required|integer|min:1|max:5',
-        'comment'        => 'required|string|min:10|max:800',
+        'first_name'       => 'required|string|max:50',
+        'last_name'        => 'required|string|max:50',
+        'equipment_type'   => 'required|string|max:50',
+        'custom_equipment' => 'required_if:equipment_type,Other|nullable|string|max:60',
+        'lane_route'       => 'nullable|string|max:100',
+        'rating'           => 'required|integer|min:1|max:5',
+        'comment'          => 'required|string|min:10|max:800',
+    ], [
+        'custom_equipment.required_if' => 'Please enter your equipment type when selecting Other.',
     ]);
 
-    $review = Review::create($validated);
+    $fullName = trim($validated['first_name'] . ' ' . $validated['last_name']);
+    $finalEquipment = $validated['equipment_type'] === 'Other'
+        ? trim((string) $validated['custom_equipment'])
+        : $validated['equipment_type'];
+
+    $initials = strtoupper(
+        mb_substr(trim($validated['first_name']), 0, 1) .
+        mb_substr(trim($validated['last_name']), 0, 1)
+    );
+
+    $review = Review::create([
+        'reviewer_name'  => $fullName,
+        'company_name'   => null,
+        'equipment_type' => $finalEquipment,
+        'lane_route'     => $validated['lane_route'] ?? null,
+        'rating'         => $validated['rating'],
+        'comment'        => $validated['comment'],
+    ]);
 
     return response()->json([
         'status'  => 'success',
@@ -59,13 +79,16 @@ Route::post('/reviews', function (Request $request) {
         'review'  => [
             'id'             => $review->id,
             'reviewer_name'  => e($review->reviewer_name),
-            'company_name'   => e($review->company_name ?: 'Independent Owner-Operator'),
+            'subtitle'       => 'Verified Owner-Operator',
             'equipment_type' => e($review->equipment_type),
+            'filter_key'     => in_array($review->equipment_type, ['Dry Van', 'Reefer', 'Flatbed', 'Box Truck'])
+                                    ? $review->equipment_type
+                                    : 'Other',
             'lane_route'     => e($review->lane_route ?: 'Nationwide US Lanes'),
             'rating'         => (int) $review->rating,
             'comment'        => e($review->comment),
             'created_human'  => 'Just now',
-            'initials'       => strtoupper(substr(trim($review->reviewer_name), 0, 2)),
+            'initials'       => $initials ?: 'SD',
         ],
     ]);
 })->name('reviews.store');
